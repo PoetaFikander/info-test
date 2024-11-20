@@ -27,7 +27,11 @@
                             {{--                                <label class="form-check-label" for="report-type-device">Urządzenie</label>--}}
                             {{--                            </div>--}}
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-3">
+                            <div class="float-end">
+                                <a href="{{ route('reports.mif.basic-exp', [0,0,0,0,'department']) }}" data-name="btn-export" class="btn btn-warning btn-sm">Pobierz plik Excel&nbsp;<i class="bi-download"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -59,9 +63,9 @@
                                 <label class="input-group-text" for="patron_altum_id">Opiekun</label>
                                 <select class="form-select" name="patron_altum_id" id="patron_altum_id">
                                     <option value="0" selected>---&nbsp;dowolny&nbsp;---</option>
-{{--                                    @foreach($patrons as $patron)--}}
-{{--                                        <option value="{{ $patron->id }}">{{ $patron->name.' '.$patron->surname }}</option>--}}
-{{--                                    @endforeach--}}
+                                    {{--                                    @foreach($patrons as $patron)--}}
+                                    {{--                                        <option value="{{ $patron->id }}">{{ $patron->name.' '.$patron->surname }}</option>--}}
+                                    {{--                                    @endforeach--}}
                                 </select>
                                 <button type="button" class="btn btn-outline-secondary" name="btn-search">
                                     <i class="bi bi-search"></i>

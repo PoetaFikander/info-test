@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Reports;
 
+use App\Exports\MifsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Authenticate;
 use App\Models\Department;
@@ -11,6 +12,8 @@ use App\Models\Reports\Mif;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +53,6 @@ class MifController extends Controller
      */
     public function basic_limited(): View
     {
-
         $user = Auth::user();
         $ids = $user->departments->pluck('id')->all();
         $departments = Department::whereIn('id', $ids)->get()->sortBy('symbol');
@@ -65,6 +67,56 @@ class MifController extends Controller
         );
     }
 
+    /**
+     * @param int $y year
+     * @param int $m month
+     * @param int $d_id department altum id
+     * @param int $p_id patron altum id
+     * @param string $r_type report type
+     *
+     */
+    public function basicExcelExport(int $y = 0, int $m = 0, int $dId = 0, int $pId = 0, string $reportType = '')
+    {
+
+        $collection = new Collection();
+        $def_department = [
+            'dep_acronym' => '',
+            'agr_count' => 0,
+            'dev_count' => 0,
+            'a3_color' => 0,
+            'a3_mono' => 0,
+            'a4_color' => 0,
+            'a4_mono' => 0,
+        ];
+
+        $params = [
+            'year' => $y,
+            'month' => $m,
+            'department_id' => $dId,
+            'patron_altum_id' => $pId,
+            'report_type' => $reportType,
+        ];
+        dump($params);
+
+        $data = Mif::getBasicReport($params);
+        dump($data);
+
+        foreach ($data['report'] as $item) {
+            $params = matchArrayParameters($def_department, (array)$item);
+            $collection->push($params);
+        }
+        dump($collection);
+
+        $datetime = Carbon::now()->toDateTimeString();;
+        //dump($datetime);
+
+        $fileName = $datetime.' mif.xlsx';
+        //dump($fileName);
+
+        //return (new MifsExport($collection, $reportType))->download($fileName);
+
+    }
+
 
     /**
      * ------------------------------------------------------------------------------
@@ -74,100 +126,15 @@ class MifController extends Controller
     public function getBasicReport(Request $request): JsonResponse
     {
         $input = $request->all();
-        $user = Auth::user();
-
-        if (self::getDepartmentIds($input, $user)) {
-            $status = 0; // ---- everything's fine
-            $message = 'Dane zostały pobrane.';
-            $report = Mif::getBasic($input);
-            //$patrons = Mif::getPatrons($input);
-        } else {
-            $status = 99; // ---- the operation was unsuccessful
-            $message = 'Wystąpił problem podczas pobierania danych!';
-            $report = [];
-            //$patrons = [];
-        }
-
-        $result = [
-            //'$patrons' => $patrons,
-            'report' => $report,
-            'status' => $status,
-            'message' => $message,
-            'input' => $input,
-        ];
+        $result = Mif::getBasicReport($input);
         return response()->json($result, 200);
     }
 
     public function getPatrons(Request $request): JsonResponse
     {
         $input = $request->all();
-        $user = Auth::user();
-
-//        if(self::getDepartmentIds($input, $user)){
-//            $status = 0; // ---- everything's fine
-//            $message = 'Dane zostały pobrane.';
-//            $report = Mif::getBasic($input);
-//
-//            $patrons = Mif::getPatrons($input);
-//
-//        } else {
-//            $status = 99; // ---- the operation was unsuccessful
-//            $message = 'Wystąpił problem podczas pobierania danych!';
-//            $report = [];
-//
-//            $patrons = [];
-//        }
-
-        $status = 0; // ---- everything's fine
-        $message = 'Dane zostały pobrane.';
-        $patrons = Mif::getPatrons($input);
-
-        $result = [
-            'patrons' => $patrons,
-            'status' => $status,
-            'message' => $message,
-            'input' => $input,
-        ];
+        $result = Mif::getPatrons($input);
         return response()->json($result, 200);
-    }
-
-    /**
-     * ------------------------------------------------------------------------------
-     * ---------------- private methods ---------------------------------------------
-     */
-
-
-    /**
-     * na podstawie uprawnień użytkownika modyfikuje tablicę danych wejściowych
-     * procedury generującej raport, dodaje string z listą ids oddziałów
-     * @param array $input
-     * @param Authenticatable $user
-     * @return bool
-     */
-    private function getDepartmentIds(array &$input, Authenticatable $user): bool
-    {
-        $departmentAltumIds = '';
-        $departmentId = (int)$input['department_id'];
-        $roles = $user->roles->pluck('name')->all();
-        $success = true;
-
-        if ($departmentId !== 0) {
-            $input['department_altum_ids'] = Department::where('id', $departmentId)->value('altum_id') . ';';
-        } else {
-            if (in_array('Super Admin', $roles) || in_array('Reports MIF full', $roles)) {
-                // ---- wszystkie oddziały
-                $input['department_altum_ids'] = '';
-            } elseif (in_array('Reports MIF limited', $roles)) {
-                // ---- tylko oddziały usera
-                foreach ($user->departments->pluck('altum_id')->all() as $id) {
-                    $departmentAltumIds .= $id . ';';
-                }
-                $input['department_altum_ids'] = $departmentAltumIds;
-            } else {
-                $success = false;
-            }
-        }
-        return $success;
     }
 
 

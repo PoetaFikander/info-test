@@ -51,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
     // ------------------------------------------------------------------------------------------
     Route::get('reports/mif/basic-full', [MifController::class, 'basic_full'])->name('reports.mif.basic-full');
     Route::get('reports/mif/basic-limited', [MifController::class, 'basic_limited'])->name('reports.mif.basic-limited');
+    Route::get('reports/mif/basic-exp/{year}/{month}/{d_id}/{p_id}/{r_type}', [MifController::class, 'basicExcelExport'])->name('reports.mif.basic-exp');
+
     Route::post('/axreportsmif/getbasicreport', [MifController::class, 'getBasicReport']);
     Route::post('/axreportsmif/getpatrons', [MifController::class, 'getPatrons']);
 

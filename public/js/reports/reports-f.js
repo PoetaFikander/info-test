@@ -35,6 +35,7 @@ class MifCompany {
         this.$containerMain = $('div[data-name=container-main]');
         this.$formFilters = $('form[name=filters]', this.$containerMain);
         this.$selectPatrons = $('select[name=patron_altum_id]', this.$containerMain)
+        this.$btnExport = $('a[data-name=btn-export]', this.$containerMain);
 
         this.$radioReportType = $('input[name=report_type]', this.$containerMain);
         this.$radioReportType.on('change', this.changeReportType);
@@ -104,6 +105,15 @@ class MifCompany {
     changeReportType = () => {
         const self = this;
         console.log('changeReportType');
+        const p = getParametersFromForm(this.$formFilters);
+        console.log(p);
+        //console.log(this.$radioReportType.prop(''))
+        this.$radioReportType.each((item)=>{
+            //const $node = $(this);
+            console.log(item);
+        })
+
+        //this.$btnExport.attr('href', 'reports/mif/basic-exp/' + p.year + '/' + p.month + '/' + p.department_id + '/' + p.patron_altum_id);
 
         this.tableMifList.clear();
         this.tableMifList.destroy();
