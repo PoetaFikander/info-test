@@ -11,13 +11,170 @@ import {
 // ---- funkcje
 import {
     ax,
-    getParametersFromForm, objLoop,
+    getParametersFromForm,
+    objLoop,
     selectOptionAdd,
+    isNumber,
 } from "../f.js";
+import {UsersList} from "../users/users-f.js";
 
 // ---- modale
 // import {
 // } from "../m.js";
+
+
+class CustomersList {
+
+    /**
+     * @param data
+     * .currentUserData - dane aktualnie zalogowanego users
+     *
+     */
+    constructor(data) {
+        console.group(`constructor: CustomersList`);
+
+        const self = this;
+        this.data = data;
+        //console.log(this.data);
+        this.$containerMain = $('div[data-name=container-main]');
+        this.$sectionFilters = $('section[data-name=filters]', this.$containerMain);
+        this.$btnSearch = $('button[name=btn-search]', this.$containerMain);
+
+        this.$tableCustomersList = $('table[data-name=table-customers-list]', this.$containerMain);
+        let tableCustomersListInit = {
+            ...dataTableInit,
+            rowId: 'cust_id',
+            columns: [
+                {data: 'cust_id'},                  // --- 0
+                {data: 'cust_code'},                // --- 1
+                {data: 'cust_name'},                // --- 2
+                {data: 'cust_tin'},                 // --- 3
+                {data: 'cust_zip_city'},            // --- 4
+                {data: null},                       // --- 5 action
+            ],
+            columnDefs: [
+                {
+                    ...dataTableColumnDef,
+                    targets: [0],
+                    width: '5%',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [1],
+                    width: '8%',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [2],
+                    className: 'ellipsis',
+                    width: '35%',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [3],
+                    width: '10%',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [-1],
+                    className: 'ellipsis',
+                    orderable: false,
+                    render: function (cellData, type, rowData) {
+                        if (type === 'display') {
+                            let a = '';
+                            a += '&nbsp;' + '<a href="#" data-name="show" class="btn btn-warning btn-sm"><i data-name="show" class="bi bi-eye"></i>&nbsp;Koszty i zyski</a>';
+                            return a;
+                        } else {
+                            return cellData;
+                        }
+                    },
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        $(td).on('click', (e) => {
+                                self.actions($(e.target).data('name'), rowData, td);
+                            }
+                        );
+                    },
+
+                },
+
+            ],
+
+        }
+        this.tableCustomersList = this.$tableCustomersList.DataTable(tableCustomersListInit);
+        // -----------------
+        this.$btnSearch.on('click', this.getCustomers);
+
+        // -----------------
+        console.groupEnd();
+    }
+
+    actions = (action, customerData, td) => {
+        switch (action) {
+            case 'show':
+                location.href = '/reports/cust/cap-full/' + +customerData.cust_id;
+                break;
+            default:
+                console.log(`UsersList.actions unknown action = ${action}`);
+        }
+    }
+
+
+    getCustomers = () => {
+        //console.log('getCustomers');
+        const self = this;
+        const params = getParametersFromForm(this.$sectionFilters);
+        switch (params.filter_type) {
+            case 'code' :
+                params.code = params.filter_value;
+                break;
+            case 'name' :
+                params.name = params.filter_value;
+                break;
+            case 'tin' :
+                params.tin = params.filter_value;
+                break;
+        }
+        //console.log(params);
+        if (!(params.code === '' && params.name === '' && params.tin === '')) {
+            ax(
+                params,
+                '/axcust/getcust',
+                function (data) {
+                    //console.log(data);
+                    self.tableCustomersList.clear();
+                    self.tableCustomersList.rows.add(data.customers).draw();
+                }
+            )
+        }
+
+    }
+
+}
+
+
+class CustomersCostsAndProfits {
+
+    /**
+     * @param data
+     * .currentUserData - dane aktualnie zalogowanego users
+     *
+     */
+    constructor(data) {
+        console.group(`constructor: CustomersCostsAndProfits`);
+
+        const self = this;
+        this.data = data;
+        //console.log(this.data);
+        this.$containerMain = $('div[data-name=container-main]');
+        this.$sectionFilters = $('section[data-name=filters]', this.$containerMain);
+
+
+
+
+        // -----------------
+        console.groupEnd();
+    }
+}
 
 class MifCompany {
 
@@ -33,7 +190,7 @@ class MifCompany {
         this.data = data;
         console.log(this.data);
         this.$containerMain = $('div[data-name=container-main]');
-        this.$formFilters = $('form[name=filters]', this.$containerMain);
+        this.$formFilters = $('section[data-name=filters]', this.$containerMain);
         this.$selectPatrons = $('select[name=patron_altum_id]', this.$containerMain)
         this.$btnExport = $('a[data-name=btn-export]', this.$containerMain);
 
@@ -50,23 +207,45 @@ class MifCompany {
         this.tableMifList = this.$tableMifList.DataTable();
         this.changeReportType();
         // -------------------------------------------------------------------------------
-
         this.getPatrons(this.refreshSelectPatrons);
+        // ----------------------------------------------------------------------------
+
+        // ----------------------------------------------------------------------------
+        this.$btnGetExcel = $('button[name=get-excel]', this.$containerMain);
+        this.$btnGetExcel.on('click', this.getBasicExcel);
+
         // -----------------
         console.groupEnd();
     }
 
+    getBasicExcel = () => {
+        const params = getParametersFromForm(this.$formFilters);
+        $overlaySpinner.fadeIn(300);
+        ax(
+            params,
+            '/axreportsmif/getbasicexcel',
+            function (data) {
+                // ---- hak na pobieranie pliku excel ajaxem
+                let a = document.createElement("a");
+                a.href = data.file;
+                a.download = data.name;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                $overlaySpinner.fadeOut(300);
+            }
+        )
+    }
+
     getBasicReport = () => {
         const self = this;
-        //console.log('getReport');
-        //console.log(getParametersFromForm(this.$formFilters));
         const params = getParametersFromForm(this.$formFilters);
         $overlaySpinner.fadeIn(300);
         ax(
             params,
             '/axreportsmif/getbasicreport',
             function (data) {
-                console.log(data);
+                //console.log(data);
                 if (+data.status === 0) {
                     self.tableMifList.clear();
                     self.tableMifList.rows.add(data.report).draw();
@@ -105,16 +284,8 @@ class MifCompany {
     changeReportType = () => {
         const self = this;
         console.log('changeReportType');
-        const p = getParametersFromForm(this.$formFilters);
-        console.log(p);
-        //console.log(this.$radioReportType.prop(''))
-        this.$radioReportType.each((item)=>{
-            //const $node = $(this);
-            console.log(item);
-        })
 
-        //this.$btnExport.attr('href', 'reports/mif/basic-exp/' + p.year + '/' + p.month + '/' + p.department_id + '/' + p.patron_altum_id);
-
+        //this.setHref();
         this.tableMifList.clear();
         this.tableMifList.destroy();
 
@@ -256,16 +427,35 @@ class MifCompany {
                 console.log(`dupa z kota:  ${params.report_type}`)
         }
 
-        //this.tableMifList = this.$tableMifList.DataTable();
         this.tableMifList = this.$tableMifList.DataTable(tableMifListInit);
 
     }
 
+    setHref = () => {
+        const p = getParametersFromForm(this.$formFilters);
+        this.$radioReportType.each(function (item) {
+            const $node = $(this);
+            if ($node.prop('checked')) {
+                p.reportType = $node.val()
+            }
+        })
+        console.log(this.$btnExport.attr('href'));
+        const origin = window.location.origin;
+        console.log(origin);
+        this.$btnExport.attr('href', origin + '/reports/mif/basic-exp/' +
+            p.year + '/' + p.month + '/' + p.department_id + '/' + p.patron_altum_id + '/' + p.reportType
+        );
+    }
+
+
 }
+
 
 // //// ---------------------------------------------------------------------------------------------
 // //// ----------------------------------------------------------------------------------------------
 export {
+    CustomersList,
+    CustomersCostsAndProfits,
     MifCompany,
 }
 

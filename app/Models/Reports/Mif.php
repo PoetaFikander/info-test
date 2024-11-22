@@ -3,14 +3,18 @@ declare(strict_types=1);
 
 namespace App\Models\Reports;
 
+use App\Exports\MifsExport;
 use App\Models\Department;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Mif extends Model
 {
@@ -66,6 +70,50 @@ class Mif extends Model
             'message' => $message,
             'input' => $input,
         ];
+
+    }
+
+
+    static function exportBasicToExcel(array $input): array
+    {
+
+        $collection = new Collection();
+        $def = [
+            'patron_txt' => '',
+            'dep_acronym' => '',
+            'agr_count' => 0,
+            'dev_count' => 0,
+            'a3_color' => 0,
+            'a3_mono' => 0,
+            'a4_color' => 0,
+            'a4_mono' => 0,
+        ];
+
+        if ($input['report_type'] === 'department') {
+            unset($def['patron_txt']);
+        }
+
+        $params = [
+            'year' => $input['year'],
+            'month' => $input['month'],
+            'department_id' => $input['department_id'],
+            'patron_altum_id' => $input['patron_altum_id'],
+            'report_type' => $input['report_type'],
+        ];
+
+        $data = Mif::getBasicReport($params);
+        foreach ($data['report'] as $item) {
+            $params = matchArrayParameters($def, (array)$item);
+            $collection->push($params);
+        }
+
+        $datetime = Carbon::now()->toDateTimeString();;
+        $myFile = Excel::raw(new MifsExport($collection, $input['report_type']), 'Xlsx');
+
+        return array(
+            'name' => $datetime . ' mif.xlsx',
+            'file' => "data:application/vnd.ms-excel;base64," . base64_encode($myFile)
+        );
 
     }
 

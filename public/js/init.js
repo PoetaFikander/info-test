@@ -1,5 +1,13 @@
 console.log('start init');
 
+// // ----- wymagany przez Laravel dla Ajax
+// $.ajaxSetup({
+//     headers: {
+//         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//     }
+// });
+
+
 String.prototype.escapeDiacritics = function () {
     return this
         .replace(/ą/g, 'a').replace(/Ą/g, 'A')

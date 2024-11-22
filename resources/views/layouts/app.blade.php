@@ -43,7 +43,11 @@
                             @include('layouts.navbars.reports')
                         @endcanany
 
-                        @if (Auth::user()->hasRole('Super Admin'))
+                        {{-- <!-- menu serwis  --> --}}
+                        @include('layouts.navbars.service')
+
+
+                    @if (Auth::user()->hasRole('Super Admin'))
                             {{-- <!-- menu konfiguracja  --> --}}
                             @include('layouts.navbars.configuration')
                         @endif

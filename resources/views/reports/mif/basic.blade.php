@@ -3,13 +3,13 @@
 @section('content')
     <div class="container-fluid p-0" data-name="container-main">
         <div class="card">
-            <form name="filters">
+            <section data-name="filters">
                 <input type="hidden" name="patron_altum_id" id="patron_altum_id" value="0">
 
                 <div class="card-header">
                     <div class="row">
                         <div class="col-1">MIF&nbsp;&nbsp;&nbsp;</div>
-                        <div class="col-8">
+                        <div class="col-9">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="report_type" id="report-type-department" value="department" checked>
                                 <label class="form-check-label" for="report-type-department">Oddział</label>
@@ -27,9 +27,9 @@
                             {{--                                <label class="form-check-label" for="report-type-device">Urządzenie</label>--}}
                             {{--                            </div>--}}
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="float-end">
-                                <a href="{{ route('reports.mif.basic-exp', [0,0,0,0,'department']) }}" data-name="btn-export" class="btn btn-warning btn-sm">Pobierz plik Excel&nbsp;<i class="bi-download"></i></a>
+                                <button class="btn btn-warning btn-sm" name="get-excel">Pobierz plik Excel&nbsp;<i class="bi-download"></i></button>
                             </div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                     </div>
                 </div>
 
-            </form>
+            </section>
         </div>
 
     </div>

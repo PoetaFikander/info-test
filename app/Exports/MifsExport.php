@@ -47,21 +47,19 @@ class MifsExport implements FromCollection, WithMapping, WithHeadings, ShouldAut
                 $row['a4_mono'],
             ];
         } elseif ($this->reportType === 'patron') {
-            return [];
+            return [
+                $row['patron_txt'],
+                $row['dep_acronym'],
+                $row['agr_count'],
+                $row['dev_count'],
+                $row['a3_color'],
+                $row['a3_mono'],
+                $row['a4_color'],
+                $row['a4_mono'],
+            ];
         } else {
             return [];
         }
-
-//        return [
-//            $row['serviceman_name'],
-//            $row['workplace_name'],
-//            $row['department_acronym'],
-//            $row['year'],
-//            $row['month'],
-//            $row['salary_gross_basis'],
-//            $row['bonus'],
-//            // ---- może być też tak $row->{'art_id'},
-//        ];
     }
 
     public function headings(): array
@@ -77,20 +75,19 @@ class MifsExport implements FromCollection, WithMapping, WithHeadings, ShouldAut
                 'A4 mono', //G
             ];
         } elseif ($this->reportType === 'patron') {
-            return [];
+            return [
+                'Opiekun', //A
+                'Oddział', //B
+                'Ilość umów', //C
+                'Ilość urządzeń', //D
+                'A3 kolor', //E
+                'A3 mono', //F
+                'A4 kolor', //G
+                'A4 mono', //H
+            ];
         } else {
             return [];
         }
-
-//        return [
-//            'Technik', //A
-//            'Stanowisko', //B
-//            'Oddział', //C
-//            'Rok', //D
-//            'Miesiąc', //E
-//            'Podstawa', //F
-//            'Premia', //G
-//        ];
     }
 
     public function columnFormats(): array
@@ -106,20 +103,20 @@ class MifsExport implements FromCollection, WithMapping, WithHeadings, ShouldAut
                 'G' => NumberFormat::FORMAT_NUMBER,
             ];
         } elseif ($this->reportType === 'patron') {
-            return [];
+            return [
+                'A' => NumberFormat::FORMAT_TEXT,
+                'B' => NumberFormat::FORMAT_TEXT,
+                'C' => NumberFormat::FORMAT_NUMBER,
+                'D' => NumberFormat::FORMAT_NUMBER,
+                'E' => NumberFormat::FORMAT_NUMBER,
+                'F' => NumberFormat::FORMAT_NUMBER,
+                'G' => NumberFormat::FORMAT_NUMBER,
+                'H' => NumberFormat::FORMAT_NUMBER,
+            ];
         } else {
             return [];
         }
 
-//        return [
-//            'A' => NumberFormat::FORMAT_TEXT,
-//            'B' => NumberFormat::FORMAT_TEXT,
-//            'C' => NumberFormat::FORMAT_TEXT,
-//            'D' => NumberFormat::FORMAT_NUMBER,
-//            'E' => NumberFormat::FORMAT_NUMBER,
-//            'F' => NumberFormat::FORMAT_NUMBER_00,
-//            'G' => NumberFormat::FORMAT_NUMBER_00,
-//        ];
     }
 
 }

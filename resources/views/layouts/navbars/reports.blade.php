@@ -1,6 +1,7 @@
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside">Raporty</a>
     <ul class="dropdown-menu shadow">
+
         <li class="dropend">
             <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">MIF</a>
             <ul class="dropdown-menu shadow">
@@ -24,5 +25,21 @@
                 {{--                    <li><a class="dropdown-item" href="{{ route('products.index') }}">Produkty</a></li>--}}
             </ul>
         </li>
+
+        <li class="dropend">
+            <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">Umowy</a>
+            <ul class="dropdown-menu shadow">
+{{--                <li><a class="dropdown-item" href="{{ route('reports.agr.cap-full') }}">Koszty i zyski - full</a></li>--}}
+            </ul>
+        </li>
+
+        <li class="dropend">
+            <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">Kontrahenci</a>
+            <ul class="dropdown-menu shadow">
+                <li><a class="dropdown-item" href="{{ route('reports.cust') }}">Lista</a></li>
+{{--                <li><a class="dropdown-item" href="{{ route('reports.cust.cap-full') }}">Koszty i zyski - full</a></li>--}}
+            </ul>
+        </li>
+
     </ul>
 </li>

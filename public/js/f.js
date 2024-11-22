@@ -78,7 +78,7 @@ function getParametersFromForm($form) {
                         params[name] = isNaN($node.val()) ? 0 : parseFloat($node.val());
                         break;
                     case 'hidden':
-                        params[name] = isNaN($node.val()) ? $node.val() : parseInt($node.val());
+                        params[name] = !isNaN(parseInt($node.val())) ? parseInt($node.val()) : $node.val();
                         break;
                     case 'text':
                         params[name] = $node.val();
@@ -130,7 +130,7 @@ function isFloat(a) {
 
 function isNumber(n) {
     //return (typeof n === 'number');
-    return !isNaN(n);
+    return !isNaN(parseInt(n)) && !isNaN(parseFloat(n)) ;
 }
 
 function roundNearest(n, fractDigits) {
@@ -194,5 +194,6 @@ export {
     selectOptionAdd,
     matchingNumericTypes,
     objLoop,
+    isNumber,
 
 }

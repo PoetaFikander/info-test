@@ -3,6 +3,8 @@
 use App\Http\Controllers\HelperAjaxDataController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Reports\AgreementController;
+use App\Http\Controllers\Reports\CustomerController;
 use App\Http\Controllers\Reports\MifController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Staff\SectionController;
@@ -47,18 +49,24 @@ Route::resources([
 Route::middleware(['auth'])->group(function () {
 
 
-    // ----------- Reports MIF -----------------------------------------------------------------------
+    // ----------- Reports MIF ------------------------------------------------------------------
     // ------------------------------------------------------------------------------------------
     Route::get('reports/mif/basic-full', [MifController::class, 'basic_full'])->name('reports.mif.basic-full');
     Route::get('reports/mif/basic-limited', [MifController::class, 'basic_limited'])->name('reports.mif.basic-limited');
-    Route::get('reports/mif/basic-exp/{year}/{month}/{d_id}/{p_id}/{r_type}', [MifController::class, 'basicExcelExport'])->name('reports.mif.basic-exp');
 
+    Route::post('/axreportsmif/getbasicexcel', [MifController::class, 'exportBasicToExcel']);
     Route::post('/axreportsmif/getbasicreport', [MifController::class, 'getBasicReport']);
     Route::post('/axreportsmif/getpatrons', [MifController::class, 'getPatrons']);
 
+    // ----------- Reports Agreements -----------------------------------------------------------
+    // ------------------------------------------------------------------------------------------
+    Route::get('reports/agr/cap-full', [AgreementController::class, 'costsAndProfits_full'])->name('reports.agr.cap-full');
 
-
-
+    // ----------- Reports Customers -----------------------------------------------------------
+    // ------------------------------------------------------------------------------------------
+    Route::get('/reports/cust', [CustomerController::class, 'index'])->name('reports.cust');
+    Route::get('/reports/cust/cap-full/{id}', [CustomerController::class, 'costsAndProfits_full'])->name('reports.cust.cap-full');
+    Route::post('/axcust/getcust', [CustomerController::class, 'getCustomers']);
 
     /**
      * -------------------------------------------------------------------------------------------------------

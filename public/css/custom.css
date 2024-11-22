@@ -22,6 +22,12 @@
     white-space: nowrap;
 }
 
+.fs-7 {
+    font-size: .7rem!important
+}
+.w-10 {
+    width: 10% !important;
+}
 
 /**
 * ---------------------------------------------------------------
