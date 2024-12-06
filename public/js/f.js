@@ -1,5 +1,20 @@
 "use strict";
+import {csrfToken} from "./c.js";
+
 console.log('module global function start');
+
+function fx(uri, params = {}, method = 'POST') {
+    return fetch(uri,
+        {
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify(params),
+        }).then(response => response.json())
+}
+
 
 function ax(params, url, callback, method = 'post') {
 
@@ -130,7 +145,7 @@ function isFloat(a) {
 
 function isNumber(n) {
     //return (typeof n === 'number');
-    return !isNaN(parseInt(n)) && !isNaN(parseFloat(n)) ;
+    return !isNaN(parseInt(n)) && !isNaN(parseFloat(n));
 }
 
 function roundNearest(n, fractDigits) {
@@ -138,11 +153,18 @@ function roundNearest(n, fractDigits) {
     return Math.round(n * factor) / factor
 }
 
+// formatuje liczby np. dodaje spacje
+function digitForm(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+
 function matchingNumericTypes(input) {
     for (const n in input) {
+        //console.log(n);
         if (Object.hasOwn(input, n)) {
             let i = input[n];
-            //if (i !== null && i.length > 0) {
+            //i = (i === null) ? 0 : i;
             if (isNumber(i)) {
                 if (isInteger(i)) input[n] = parseInt(i);
                 if (isFloat(i)) {
@@ -187,13 +209,37 @@ function objLoop(obj, callback, params = {}) {
     )
 }
 
+const randomString = (length = 20) => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+};
+
+const isObjectEmpty = (objectName) => {
+    return (
+        objectName &&
+        Object.keys(objectName).length === 0 &&
+        objectName.constructor === Object
+    );
+};
+
+
 // ----
 export {
+    fx,
     ax,
     getParametersFromForm,
     selectOptionAdd,
     matchingNumericTypes,
     objLoop,
     isNumber,
+    roundNearest,
+    digitForm,
+    randomString,
+    isObjectEmpty,
 
 }

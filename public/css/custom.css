@@ -15,6 +15,33 @@
  * ---------------------------------------------------------------
  */
 
+
+/**
+ * ---- bootstrap ----
+ * ---------------------------------------------------------------
+ */
+
+.modal-xxl {
+    --bs-modal-width: 1320px;
+}
+
+.fs-7 {
+    font-size: .7rem !important;
+}
+
+.fs-8 {
+    font-size: .6rem !important;
+}
+
+.w-10 {
+    width: 10% !important;
+}
+
+/**
+ * ---- end bootstrap ----
+ * ---------------------------------------------------------------
+ */
+
 .ellipsis {
     max-width: 300px;
     overflow: hidden;
@@ -22,12 +49,79 @@
     white-space: nowrap;
 }
 
-.fs-7 {
-    font-size: .7rem!important
+.pointer {
+    cursor: pointer;
 }
-.w-10 {
-    width: 10% !important;
+.pointer:hover {
+    font-weight: bolder;
 }
+
+table.table-vsm > thead > tr > th {
+    font-size: .6rem !important;
+    font-weight: lighter;
+}
+table.table-vsm > tbody > tr > th {
+    font-size: .8rem !important;
+    font-weight: normal;
+}
+
+
+/* ----- data tables  ----- */
+
+.dt-justify-content-between-0 div.dt-container > div.justify-content-between {
+    margin-top: 0 !important;
+}
+
+/* ----- end data tables  ----- */
+
+/* ----- modal-type-1  ----- */
+
+.modal-type-1 table {
+    font-size: 0.75rem;
+}
+
+.modal-type-1 table > tbody {
+    font-weight: lighter;
+}
+
+.modal-type-1 .col-form-label {
+    font-size: .70rem;
+    padding: 1px 6px;
+    font-weight: normal;
+    line-height: 1.1;
+    color: #9ca3af;
+}
+
+.modal-type-1 input.form-control {
+    /*font-size: .90rem;*/
+    /*font-weight: 600;*/
+    /*line-height: 1.4;*/
+    padding: 0 10px;
+    /*background-color: #ebebeb;*/
+}
+
+.modal-type-1 textarea.h-content {
+    /*font-size: .90rem;*/
+    /*font-weight: 600;*/
+    /*background-color: #ebebeb;*/
+}
+
+.modal-type-1 fieldset {
+    /*border-color: #ced4da;*/
+}
+
+.modal-type-1 fieldset > legend {
+    font-size: .70rem !important;
+    color: #9ca3af;
+    /*font-weight: 500;*/
+    /*color: #146c43;*/
+}
+
+.modal-type-1 div.dataTables_wrapper div.dataTables_filter input {
+    /*min-width: 15rem !important;*/
+}
+
+/* ----- end modal-type-1 ----- */
 
 /**
 * ---------------------------------------------------------------

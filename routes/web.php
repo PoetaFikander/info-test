@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\HelperAjaxDataController;
+use App\Http\Controllers\Modals\ModalController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Reports\AgreementController;
 use App\Http\Controllers\Reports\CustomerController;
+use App\Http\Controllers\Reports\DocumentController;
 use App\Http\Controllers\Reports\MifController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Staff\SectionController;
@@ -67,12 +69,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports/cust', [CustomerController::class, 'index'])->name('reports.cust');
     Route::get('/reports/cust/cap-full/{id}', [CustomerController::class, 'costsAndProfits_full'])->name('reports.cust.cap-full');
     Route::post('/axcust/getcust', [CustomerController::class, 'getCustomers']);
+    Route::post('/axcust/getcustcosts', [CustomerController::class, 'getCustomersCosts']);
+    Route::post('/axcust/getcustprofits', [CustomerController::class, 'getCustomersProfits']);
 
-    /**
-     * -------------------------------------------------------------------------------------------------------
-     * ----------------------- AJAX --------------------------------------------------------------------------
-     * -------------------------------------------------------------------------------------------------------
-     */
+
+    // ----------- Documents -----------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------
+    Route::post('/axdoc/getdocitems', [DocumentController::class, 'getDocumentItems']);
+    Route::post('/axdoc/getdocsitemsgr', [DocumentController::class, 'getDocumentsItemsGrouped']);
 
     // ----------- Users -----------------------------------------------------------------------
     // ------------------------------------------------------------------------------------------
@@ -86,8 +90,14 @@ Route::middleware(['auth'])->group(function () {
     // ----------- Helper -----------------------------------------------------------------------
     // ------------------------------------------------------------------------------------------
     Route::post('/axhelp/getCurrentUserData', [HelperAjaxDataController::class, 'getCurrentUserData']);
-    Route::post('/axhelp/getDataForUsersList', [HelperAjaxDataController::class, 'getDataForUsersList']);
-    Route::post('/axhelp/getDataForEmployeesList', [HelperAjaxDataController::class, 'getDataForEmployeesList']);
+    Route::post('/axhelp/getUsersList', [HelperAjaxDataController::class, 'getUsersList']);
+    Route::post('/axhelp/getEmployeesList', [HelperAjaxDataController::class, 'getEmployeesList']);
+
+    // ----------- Modal -----------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------
+    Route::post('/axmodal/getModalBlade', [ModalController::class, 'getModalBlade']);
+    Route::post('/axmodal/getModalData', [ModalController::class, 'getModalData']);
+
 
 
 });

@@ -26,11 +26,9 @@ class UsersList {
      * .users - lista userów systemu
      */
     constructor(data) {
-        console.log(data);
-
+        //console.log(data);
         const self = this;
         console.group(`constructor: UsersList`);
-
         this.$containerMain = $('div[data-name=container-main]');
 
         // -------------------------------------------------------------------------------
@@ -100,7 +98,6 @@ class UsersList {
         this.tableUsersList = this.$tableUsersList.DataTable(tableUsersListInit);
         this.tableUsersList.rows.add(data.users).draw();
         // -------------------------------------------------------------------------------
-
 
         // -----------------
         console.groupEnd();

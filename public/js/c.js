@@ -4,6 +4,8 @@ console.log('module global constants start');
 // ---- blokada ekranu podczas długich zapytań ajax
 const $overlaySpinner = $('#overlay-spinner');
 
+const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
 // ---- domyślne parametry dla sweetalert2
 const swalDefOptions = {
     title: '',
@@ -52,12 +54,23 @@ const dataTableInit = {
     ordering: true,
     info: true,
     language: dataTableLang,
-    rowId: 'id',
+    rowId: 'DT_RowId',
     order: [],
     columns: [],
     columnDefs: [],
     //createdRow: function (row, rowData, dataIndex) {}
 }
+
+
+// dataTables column built in types
+// num - Plain numbers (e.g. 1, 8432).
+// num-fmt - Formatted numbers (e.g. $1'000, 8,000,000).
+// html-num - Plain numbers with HTML (e.g. 10).
+// html-num-fmt - Formatted numbers with HTML (e.g. _<em>€9.200,00</em>)
+// date - Dates in ISO8601 format (e.g. 2151-04-01).
+// html - HTML strings (e.g. <i>Tick</i>).
+// string-utf8 - Plain text strings with UTF-8 characters (e.g. Creme Brulée). 2.1.0
+// string - Plain text strings
 
 const dataTableColumnDef = {
     targets: [],
@@ -80,5 +93,5 @@ export {
     dataTableLang,
     dataTableInit,
     dataTableColumnDef,
-
+    csrfToken,
 }

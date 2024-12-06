@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\Reports\Agreement;
 use App\Models\Reports\Customer;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -43,21 +44,16 @@ class CustomerController extends Controller
             'cust_zip_city' => '',
         ];
         $customer = count($customer) ? $customer[0] : $c;
-
-        $dateFrom = Carbon::createFromDate(Carbon::today()->year, 1, 1);
-        $dateTo = Carbon::createFromDate(Carbon::today()->year, 12, 31 );
-
-
+        $agreements = Agreement::getCustomerAgreements(['cust_id' => $id])['agreements'];
         return view(
             'reports.customers.costs-and-profits',
             [
                 'customer' => $customer,
-                'dateFrom' =>Carbon::createFromDate(Carbon::today()->year, 1, 1)->toDateString(),
-                'dateTo' =>Carbon::createFromDate(Carbon::today()->year, 12, 31 )->toDateString(),
+                'agreements' =>$agreements,
+                'dateFrom' => Carbon::createFromDate(Carbon::today()->year, 1, 1)->toDateString(),
+                'dateTo' => Carbon::createFromDate(Carbon::today()->year, 12, 31)->toDateString(),
                 'departments' => Department::all()->sortBy('symbol'),
             ]
-
-
         );
 
     }
@@ -66,6 +62,20 @@ class CustomerController extends Controller
      * ------------------------------------------------------------------------------
      * ---------------- methods called by AJAX --------------------------------------
      */
+
+    public function getCustomersProfits(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        $result = Customer::getCustomersProfits($input);
+        return response()->json($result, 200);
+    }
+
+    public function getCustomersCosts(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        $result = Customer::getCustomersCosts($input);
+        return response()->json($result, 200);
+    }
 
     public function getCustomers(Request $request): JsonResponse
     {

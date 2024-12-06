@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\Employee;
+use App\Models\Reports\Agreement;
 use App\Models\Section;
 use App\Models\User;
 use App\Models\Workplace;
@@ -32,36 +33,28 @@ class HelperAjaxDataController extends Controller
      */
     public function getCurrentUserData(): JsonResponse
     {
-        return response()->json([
-            'currentUserData' => User::getUserData(Auth::user()->id),
-        ], 200
-        );
+        return response()->json(User::getUserData(), 200);
     }
 
     /**
      * data required by js class: UsersList
      * @return JsonResponse
      */
-    public function getDataForUsersList(): JsonResponse
+    public function getUsersList(): JsonResponse
     {
         $users = User::all();
         foreach ($users as $user) {
             $user->{'name_surname'} = $user->name . ' ' . $user->surname;
             $user->getRoleNames();
         }
-
-        return response()->json([
-            'currentUserData' => User::getUserData(Auth::user()->id),
-            'users' => $users,
-        ], 200
-        );
+        return response()->json($users, 200);
     }
 
     /**
      * data required by js class: UsersList
      * @return JsonResponse
      */
-    public function getDataForEmployeesList(): JsonResponse
+    public function getEmployeesList(): JsonResponse
     {
         $employees = Employee::all();
         foreach ($employees as $employee) {
@@ -70,17 +63,8 @@ class HelperAjaxDataController extends Controller
             $employee->workplace;
             $employee->section;
         }
-
-        return response()->json([
-            'currentUserData' => User::getUserData(Auth::user()->id),
-            'employees' => $employees,
-//            'departments' => Department::all(),
-//            'workplaces' => Workplace::all(),
-//            'sections' => Section::all(),
-        ], 200
-        );
+        return response()->json($employees, 200);
     }
-
 
 
 }

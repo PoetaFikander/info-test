@@ -28,7 +28,7 @@ class EmployeeCreate {
         const self = this;
         console.group(`constructor: EmployeeCreate`);
         this.data = data;
-        console.log(this.data);
+        //console.log(this.data);
 
         this.$containerMain = $('div[data-name=container-main]');
         this.$selectAltumId = $('select[name=altum_id]', this.$containerMain);
@@ -85,10 +85,7 @@ class EmployeesList {
         const self = this;
         console.group(`constructor: EmployeesList`);
         console.log(data);
-
-
         this.$containerMain = $('div[data-name=container-main]');
-
         // -------------------------------------------------------------------------------
         // ---- tableEmployeesList
         this.$tableEmployeesList = $('table[data-name=table-employees-list]', this.$containerMain);
@@ -176,7 +173,6 @@ class EmployeesList {
         this.tableEmployeesList = this.$tableEmployeesList.DataTable(tableEmployeesListInit);
         this.tableEmployeesList.rows.add(data.employees).draw();
         // -------------------------------------------------------------------------------
-
 
         // -----------------
         console.groupEnd();
