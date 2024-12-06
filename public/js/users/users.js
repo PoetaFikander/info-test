@@ -1,11 +1,14 @@
 "use strict";
+import {$overlaySpinner} from "../c.js";
+
 console.log('module users start');
 
-import {ax} from "../f.js";
+import {ax, fx} from "../f.js";
 
 import {
     UsersList,
 } from "./users-f.js";
+import {EmployeesList} from "../staff/employees-f.js";
 
 const sourcePathName = window.location.pathname;
 const section = sourcePathName.split('/')[1];
@@ -18,12 +21,19 @@ const subModule = sourcePathName.split('/')[3];
 //console.log(`subModule: ${subModule}`);
 
 if (section === 'users') {
-    ax(
-        {},
-        '/axhelp/getDataForUsersList',
-        function (data) {
-            //console.log(data)
-            const uu = new UsersList(data);
-        }
-    )
+    (async () => {
+        $overlaySpinner.fadeIn(300);
+        const [
+            currentUserData,
+            users,
+        ] = await Promise.all([
+            fx('/axhelp/getCurrentUserData'),
+            fx('/axhelp/getUsersList'),
+        ]);
+        const temp = new UsersList({
+            currentUserData: currentUserData,
+            users: users,
+        });
+        $overlaySpinner.fadeOut(300);
+    })();
 }

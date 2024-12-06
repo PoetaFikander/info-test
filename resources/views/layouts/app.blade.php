@@ -47,7 +47,7 @@
                         @include('layouts.navbars.service')
 
 
-                    @if (Auth::user()->hasRole('Super Admin'))
+                        @if (Auth::user()->hasRole('Super Admin'))
                             {{-- <!-- menu konfiguracja  --> --}}
                             @include('layouts.navbars.configuration')
                         @endif
@@ -77,6 +77,8 @@
             </div>
         </div>
     </main>
+    {{--    <!-- kontener na dynamicznie ładowane modale -->--}}
+    <div id="modals-templates" data-name="modals-templates"></div>
 </div>
 
 {{--<!-- =========================================================================================== -->--}}

@@ -1,5 +1,7 @@
 console.log('start init');
 
+import {MyModal,} from './m.js'
+
 // // ----- wymagany przez Laravel dla Ajax
 // $.ajaxSetup({
 //     headers: {

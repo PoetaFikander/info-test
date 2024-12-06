@@ -1,9 +1,11 @@
 "use strict";
+import {MifCompany} from "../reports/reports-f.js";
+
 console.log('module employees start');
 
 import {$overlaySpinner} from "../c.js";
 
-import {ax} from "../f.js";
+import {ax, fx} from "../f.js";
 
 import {
     EmployeeCreate,
@@ -23,27 +25,34 @@ console.log(`subModule: ${subModule}`);
 
 
 if (section === 'staff' && module === 'employees' && subModule !== 'create') {
-    $overlaySpinner.fadeIn(300);
-    ax(
-        {},
-        '/axhelp/getDataForEmployeesList',
-        function (data) {
-            //console.log(data)
-            const temp = new EmployeesList(data);
-            $overlaySpinner.fadeOut(300);
-        }
-    )
+    (async () => {
+        $overlaySpinner.fadeIn(300);
+        const [
+            currentUserData,
+            employees,
+        ] = await Promise.all([
+            fx('/axhelp/getCurrentUserData'),
+            fx('/axhelp/getEmployeesList'),
+        ]);
+        const temp = new EmployeesList({
+            currentUserData: currentUserData,
+            employees: employees,
+        });
+        $overlaySpinner.fadeOut(300);
+    })();
 }
 
 if (section === 'staff' && module === 'employees' && subModule === 'create') {
-    $overlaySpinner.fadeIn(300);
-    ax(
-        {},
-        '/axhelp/getCurrentUserData',
-        function (data) {
-            //console.log(data)
-            const temp = new EmployeeCreate(data);
-            $overlaySpinner.fadeOut(300);
-        }
-    )
+    (async () => {
+        $overlaySpinner.fadeIn(300);
+        const [
+            currentUserData,
+        ] = await Promise.all([
+            fx('/axhelp/getCurrentUserData'),
+        ]);
+        const temp = new EmployeeCreate({
+            currentUserData: currentUserData,
+        });
+        $overlaySpinner.fadeOut(300);
+    })();
 }
