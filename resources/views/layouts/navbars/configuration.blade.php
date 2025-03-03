@@ -14,6 +14,10 @@
                 @canany(['create-permission', 'edit-permission', 'delete-permission'])
                     <li><a class="dropdown-item" href="{{ route('permissions.index') }}">Uprawnienia</a></li>
                 @endcanany
+                @canany(['create-dynamic-tables', 'edit-dynamic-tables', 'delete-dynamic-tables'])
+                    <li><a class="dropdown-item" href="{{ route('dynamic-tables.index') }}">Tabele dynamiczne</a></li>
+                @endcanany
+
             </ul>
         </li>
 

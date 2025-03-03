@@ -129,4 +129,36 @@ class Customer extends Model
     }
 
 
+    static function getCustomerAddresses(array $input): array
+    {
+        $status = 0; // ---- everything's fine
+        $message = config('global.message.ok');
+        $addresses = self::getCustomerAddressesSQL($input);
+        return [
+            'addresses' => $addresses,
+            'status' => $status,
+            'message' => $message,
+            'input' => $input,
+        ];
+    }
+
+    private static function getCustomerAddressesSQL(array $input): array
+    {
+        $def = [
+            'cust_id' => 0,
+        ];
+        $params = matchArrayParameters($def, $input);
+
+        return DB::connection('sqlsrv')->select(
+            "
+                select * from [dbo].[getCustomerAddresses](
+                     :cust_id
+                ) order by [cust_addr_type_name], [cust_address]
+           ", $params
+        );
+
+    }
+
+
+
 }

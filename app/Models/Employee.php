@@ -51,27 +51,27 @@ class Employee extends Model
     }
 
 
-    /**
-     * list of active employees at Altum
-     * @return array
-     */
-    static function getAltumEmployees(): array
-    {
-        return DB::connection('sqlsrv')->select(
-            "SELECT * FROM [dbo].[getAltumEmployees] () order by [name_surname]"
-        );
-    }
-
-    /**
-     * @param int $altumEmployeeId
-     * @return array
-     */
-    static function getAltumEmployee(int $altumEmployeeId): array
-    {
-        return DB::connection('sqlsrv')->select(
-            "SELECT * FROM [dbo].[getAltumEmployees] () WHERE [id] = :id",
-            ['id' => $altumEmployeeId]
-        );
-    }
+//    /**
+//     * list of active employees at Altum
+//     * @return array
+//     */
+//    static function getAltumEmployees(): array
+//    {
+//        return DB::connection('sqlsrv')->select(
+//            "SELECT * FROM [dbo].[getAltumEmployees] () order by [name_surname]"
+//        );
+//    }
+//
+//    /**
+//     * @param int $altumEmployeeId
+//     * @return array
+//     */
+//    static function getAltumEmployee(int $altumEmployeeId): array
+//    {
+//        return DB::connection('sqlsrv')->select(
+//            "SELECT * FROM [dbo].[getAltumEmployees] () WHERE [id] = :id",
+//            ['id' => $altumEmployeeId]
+//        );
+//    }
 
 }

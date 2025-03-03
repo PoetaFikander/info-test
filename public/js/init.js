@@ -1,14 +1,8 @@
 console.log('start init');
-
+import {$overlaySpinner} from "./c.js";
 import {MyModal,} from './m.js'
-
-// // ----- wymagany przez Laravel dla Ajax
-// $.ajaxSetup({
-//     headers: {
-//         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//     }
-// });
-
+import {fx} from "./f.js";
+import {MifCompany} from "./reports/reports-f.js";
 
 String.prototype.escapeDiacritics = function () {
     return this

@@ -70,6 +70,7 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
+        //dump($user);
         return view('users.show', [
             'user' => $user
         ]);

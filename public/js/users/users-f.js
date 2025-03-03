@@ -22,11 +22,10 @@ class UsersList {
 
     /**
      * @param data
-     * .currentUserData - dane aktualnie zalogowanego users
      * .users - lista userów systemu
      */
     constructor(data) {
-        //console.log(data);
+        console.log(data);
         const self = this;
         console.group(`constructor: UsersList`);
         this.$containerMain = $('div[data-name=container-main]');
@@ -36,12 +35,15 @@ class UsersList {
         this.$tableUsersList = $('table[data-name=table-users-list]', this.$containerMain);
         let tableUsersListInit = {
             ...dataTableInit,
+            autoWidth: false,
             columns: [
                 {data: 'id'},                   // --- 0
                 {data: 'name_surname'},         // --- 1
                 {data: 'email'},                // --- 2
-                {data: null},                   // --- 3 roles
-                {data: null},                   // --- 4 action
+                {data: 'last_login_at'},        // --- 3
+                {data: 'last_activity'},        // --- 4
+                {data: null},                   // --- 5 roles
+                {data: null},                   // --- 6 action
             ],
             columnDefs: [
                 {
@@ -51,7 +53,12 @@ class UsersList {
                 },
                 {
                     ...dataTableColumnDef,
-                    targets: [3],
+                    targets: [1, 2, 3, 4],
+                    className: 'ellipsis',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [5],
                     orderable: false,
                     render: function (cellData, type, rowData) {
                         if (type === 'display') {
@@ -67,7 +74,7 @@ class UsersList {
                 },
                 {
                     ...dataTableColumnDef,
-                    targets: [4],
+                    targets: [6],
                     orderable: false,
                     render: function (cellData, type, rowData) {
                         if (type === 'display') {

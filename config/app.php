@@ -70,7 +70,9 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    //'timezone' => 'UTC',
+    //'timezone' => 'Europe/Warsaw',
+    'timezone' => env('APP_TIMEZONE', 'Europe/Warsaw'),
 
     /*
     |--------------------------------------------------------------------------

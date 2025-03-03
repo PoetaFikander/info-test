@@ -7,6 +7,7 @@ use App\Http\Requests\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Models\Department;
 use App\Models\Employee;
+use App\Models\Reports\AltumUniversal;
 use App\Models\Section;
 use App\Models\User;
 use App\Models\Workplace;
@@ -24,14 +25,14 @@ class EmployeeController extends Controller
 
     public function index(): View
     {
-        //dump(getModelByTableName('employee_salary_archives'));
+        //dump(getModelByTableName('dynamic_table_columns'));
         return view('staff.employees.index');
     }
 
     public function create(): View
     {
         return view('staff.employees.create', [
-            'altumEmployees' => Employee::getAltumEmployees(),
+            'altumEmployees' => AltumUniversal::getAltumEmployees(),
             'departments' => Department::all(),
             'sections' => Section::all(),
             'workplaces' => Workplace::all(),
@@ -82,7 +83,7 @@ class EmployeeController extends Controller
     public function getAltumEmployee(Request $request): JsonResponse
     {
         $input = $request->all();
-        $employee = Employee::getAltumEmployee($input['id']);
+        $employee = AltumUniversal::getAltumEmployee($input['id']);
         if (count($employee) === 1) {
             $employee = $employee[0];
             $message = 'Dane zostały pobrane.';

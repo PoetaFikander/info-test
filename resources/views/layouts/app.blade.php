@@ -13,6 +13,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- other -->
     <link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-multiselect.css') }}" rel="stylesheet">
     <!-- my -->
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
@@ -38,18 +39,39 @@
                             <a class="nav-link active" aria-current="page" href="{{ route('home') }}"><i class="bi bi-house"></i></a>
                         </li>
 
-                        @canany(['show-mif-full','show-mif-limited'])
-                            {{-- <!-- menu raporty  --> --}}
+                        {{--                        @canany(['show-mif-full','show-mif-limited'])--}}
+                        {{--                            --}}{{-- <!-- menu raporty  --> --}}
+                        {{--                            @include('layouts.navbars.reports')--}}
+                        {{--                        @endcanany--}}
+
+                        @if (Auth::user()->hasRole('Super Admin'))
+                            <!-- menu raporty  -->
                             @include('layouts.navbars.reports')
-                        @endcanany
+                        @endif
 
-                        {{-- <!-- menu serwis  --> --}}
-                        @include('layouts.navbars.service')
-
+                        @if (Auth::user()->hasRole('Super Admin'))
+                            {{-- <!-- menu serwis  --> --}}
+                            @include('layouts.navbars.service')
+                        @endif
 
                         @if (Auth::user()->hasRole('Super Admin'))
                             {{-- <!-- menu konfiguracja  --> --}}
                             @include('layouts.navbars.configuration')
+                        @endif
+
+                        @if (Auth::user()->hasRole('Super Admin'))
+                            {{-- <!-- menu IT  --> --}}
+                            @include('layouts.navbars.it')
+                        @endif
+
+                        @if (Auth::user()->hasRole(['Super Admin','BOK Manager','BOK Standard']))
+                            {{-- <!-- menu BOK  --> --}}
+                            @include('layouts.navbars.bok')
+                        @endif
+
+                        @if (Auth::user()->hasRole(['Super Admin','Service Manager']))
+                            {{-- <!-- menu Serwis  --> --}}
+                            @include('layouts.navbars.service')
                         @endif
 
                         {{-- <!-- testy --> --}}
@@ -87,6 +109,7 @@
 {{--<script src="{{ asset('DataTables/dataTables.bootstrap5.min.js') }}" type="module"></script>--}}
 {{--<script src="{{ asset('DataTables/dataTables.select.min.js') }}" type="module"></script>--}}
 {{--<script src="{{ asset('Datepicker/bootstrap-datepicker.min.js') }}" type="module"></script>--}}
+<script src="{{ asset('js/bootstrap-multiselect/bootstrap-multiselect.js') }}" type="module"></script>
 {{--<!-- js my global -->--}}
 <script src="{{ asset('js/init.js') }}" type="module"></script>
 {{--<!-- js for module -->--}}

@@ -12,6 +12,12 @@ return [
             'code' => 'kod',
             'name' => 'nazwa',
             'tin' => 'NIP',
+        ],
+        'device' => [
+            'dev_name' => 'nazwa',
+            'dev_serial_no' => 'nr seryjny',
+            'cust_name' => 'kontrahent',
+            'agr_no' => 'nr umowy',
         ]
     ]
 

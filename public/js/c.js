@@ -48,7 +48,7 @@ const dataTableLang = {
 
 const dataTableInit = {
     paging: true,
-    pageLength : 10,
+    pageLength: 10,
     autoWidth: true,
     searching: true,
     ordering: true,

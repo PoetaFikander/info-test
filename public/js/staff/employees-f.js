@@ -21,8 +21,6 @@ class EmployeeCreate {
 
     /**
      * @param data
-     * .currentUserData - dane aktualnie zalogowanego users
-     *
      */
     constructor(data) {
         const self = this;
@@ -78,7 +76,6 @@ class EmployeesList {
 
     /**
      * @param data
-     * .currentUserData - dane aktualnie zalogowanego users
      * .employees - lista pracowników z Altum
      */
     constructor(data) {

@@ -1,5 +1,5 @@
 "use strict";
-import {csrfToken} from "./c.js";
+import {$overlaySpinner, csrfToken} from "./c.js";
 
 console.log('module global function start');
 
@@ -132,7 +132,6 @@ function selectOptionAdd($select, value, text) {
     $select.append(html);
 }
 
-
 function isInteger(a) {
     //return ((typeof n === 'number') && (n % 1 === 0));
     return a - a === 0 && a.toString(32).indexOf('.') === -1
@@ -227,9 +226,23 @@ const isObjectEmpty = (objectName) => {
     );
 };
 
+const objToArr = (obj) => {
+    let r = [];
+    for (let n in obj) {
+        r[n] = obj[n];
+    }
+    return r
+}
 
-// ----
+// -------------------------------------------------------------------------------------------------
+async function getCUD() {
+    return await fx('/axhelp/getCurrentUserData');
+}
+const CUD = await getCUD();
+
+// -------------------------------------------------------------------------------------------------
 export {
+    CUD,
     fx,
     ax,
     getParametersFromForm,
@@ -241,5 +254,8 @@ export {
     digitForm,
     randomString,
     isObjectEmpty,
+    isFloat,
+    isInteger,
+    objToArr,
 
 }

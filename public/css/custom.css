@@ -15,6 +15,101 @@
  * ---------------------------------------------------------------
  */
 
+.form-check-label-sm {
+    font-size: .7875rem; !important;
+}
+
+.center {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+.ellipsis {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ellipsis-100 {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ellipsis-125 {
+    max-width: 125px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ellipsis-150 {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+table.pointer > tbody > tr {
+    cursor: pointer;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.pointer:hover {
+    font-weight: bolder;
+}
+
+table.table-vsm > thead > tr > th {
+    font-size: .6rem !important;
+    font-weight: lighter;
+}
+
+table.table-vsm > tbody > tr > td {
+    font-size: .8rem !important;
+    font-weight: normal;
+}
+
+table.table-vvsm > thead > tr > th {
+    font-size: .6rem !important;
+    font-weight: lighter;
+}
+
+table.table-vvsm > tbody > tr > td {
+    font-size: .6rem !important;
+    font-weight: normal;
+}
+
+
+.label-min-width-120 {
+    min-width: 120px !important;
+}
+.label-min-width-150 {
+    min-width: 150px !important;
+}
+.label-min-width-200 {
+    min-width: 200px !important;
+}
+.label-min-width-250 {
+    min-width: 250px !important;
+}
+
+.label-max-width-100 {
+    max-width: 100px !important;
+}
+.label-max-width-150 {
+    max-width: 150px !important;
+}
+.label-max-width-200 {
+    max-width: 200px !important;
+}
 
 /**
  * ---- bootstrap ----
@@ -24,6 +119,11 @@
 .modal-xxl {
     --bs-modal-width: 1320px;
 }
+
+.modal-width-600 {
+    --bs-modal-width: 600px;
+}
+
 
 .fs-7 {
     font-size: .7rem !important;
@@ -41,30 +141,6 @@
  * ---- end bootstrap ----
  * ---------------------------------------------------------------
  */
-
-.ellipsis {
-    max-width: 300px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.pointer {
-    cursor: pointer;
-}
-.pointer:hover {
-    font-weight: bolder;
-}
-
-table.table-vsm > thead > tr > th {
-    font-size: .6rem !important;
-    font-weight: lighter;
-}
-table.table-vsm > tbody > tr > th {
-    font-size: .8rem !important;
-    font-weight: normal;
-}
-
 
 /* ----- data tables  ----- */
 

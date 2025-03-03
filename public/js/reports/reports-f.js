@@ -4,20 +4,17 @@
 import {$overlaySpinner, dataTableColumnDef, dataTableInit, csrfToken,} from "../c.js"
 
 // ---- funkcje
-import {fx, ax, getParametersFromForm, objLoop, selectOptionAdd,} from "../f.js";
+import {fx, ax, getParametersFromForm, objLoop, selectOptionAdd, CUD,} from "../f.js";
 import {MyModal} from "../m.js";
 
 // ---- modale
 // import {
 // } from "../m.js";
 
-
 class CustomersList {
 
     /**
      * @param data
-     * .currentUserData - dane aktualnie zalogowanego users
-     *
      */
     constructor(data) {
         console.group(`constructor: CustomersList`);
@@ -146,17 +143,14 @@ class CustomersCostsAndProfits {
 
     /**
      * @param data
-     * .currentUserData - dane aktualnie zalogowanego users
-     *
      */
     constructor(data) {
         console.group(`constructor: CustomersCostsAndProfits`);
-        const self = this;
         this.data = data;
         this.$containerMain = $('div[data-name=container-main]');
         this.$sectionFilters = $('section[data-name=filters]', this.$containerMain);
         this.$btnSearch = $('button[name=btn-search]', this.$containerMain);
-        // ------
+        // -----------------
         this.results = {
             'costs_wz_count': 0,
             'costs_wz_value': 0,
@@ -174,7 +168,7 @@ class CustomersCostsAndProfits {
             'agr_correction_value': 0,
             'agr_summary': 0,
         }
-        // ------
+        // -----------------
         this.$tableWzCostList = $('table[data-name=table-wz-cost-list]', this.$containerMain);
         let tableWzCostListInit = {
             ...dataTableInit,
@@ -213,7 +207,7 @@ class CustomersCostsAndProfits {
             ],
         }
         this.tableWzCostList = this.$tableWzCostList.DataTable(tableWzCostListInit);
-        // ------
+        // -----------------
         this.$tableFsProfitList = $('table[data-name=table-fs-profit-list]', this.$containerMain);
         let tableFsProfitListInit = {
             ...dataTableInit,
@@ -262,7 +256,7 @@ class CustomersCostsAndProfits {
 
         }
         this.tableFsProfitList = this.$tableFsProfitList.DataTable(tableFsProfitListInit);
-        // ------
+        // -----------------
         this.$tableWzItemsList = $('table[data-name=table-wz-items-list]', this.$containerMain);
         let tableWzItemsListInit = {
             ...dataTableInit,
@@ -330,28 +324,25 @@ class CustomersCostsAndProfits {
         // -----------------
         this.$btnSearch.on('click', this.getData);
         // ---------------------------------------------------------------------------------------
-        // ----------------- TODO testy modala
         this.$tableActiveAgreements = $('table[data-name=active-agreements]', this.$containerMain)
-
         this.$tableActiveAgreements.on('click', 'tr', async (e) => {
             const id = parseInt($(e.currentTarget).data('id'));
-            console.log(id);
             const modal = new MyModal('agreement', {'agr_id': id});
             await modal.initialize();
         })
-
+        // -----------------
         this.$tableWzCostList.on('click', 'tr', async (e) => {
             const id = parseInt($(e.currentTarget).attr('id'));
-            const modal = new MyModal('altumDocument', {'doc_id': id});
+            const modal = new MyModal('native-document', {'doc_id': id});
             await modal.initialize();
         })
-
+        // -----------------
         this.$tableFsProfitList.on('click', 'tr', async (e) => {
             const id = parseInt($(e.target).attr('data-id'));
             let modal = null;
             switch ($(e.target).attr('data-type')) {
                 case 'default':
-                    modal = new MyModal('altumDocument', {'doc_id': id});
+                    modal = new MyModal('native-document', {'doc_id': id});
                     break;
                 case 'agreement':
                     modal = new MyModal('agreement', {'agr_id': id});
@@ -363,9 +354,6 @@ class CustomersCostsAndProfits {
                 await modal.initialize();
             }
         })
-
-
-        // ----------------- TODO testy modala end
         // ---------------------------------------------------------------------------------------
         // -----------------
         console.groupEnd();
@@ -406,7 +394,6 @@ class CustomersCostsAndProfits {
         let costs_wz_count = 0;
         let costs_wz_value = 0;
         let wzCostIds = '';
-
         objLoop(costs, (k, v) => {
             // ---- WZ bez FS
             if (+v.doc_type_id === 28 && +v.child_doc_id === 0 && +v.parent_doc_id === 0) {
@@ -432,7 +419,6 @@ class CustomersCostsAndProfits {
         let agr_fs_count = 0;
         let agr_fs_value = 0;
         let fsAgrIds = '';
-
         objLoop(profits, (k, v) => {
             // ---- FS
             if (+v.doc_type_id === 8) {
@@ -457,7 +443,6 @@ class CustomersCostsAndProfits {
                 }
             }
         })
-
         // ---- results
         this.results.costs_wz_value = (costs_wz_value).toFixed(2);
         this.results.costs_wz_count = costs_wz_count;
@@ -541,16 +526,12 @@ class CustomersCostsAndProfits {
         );
     }
 
-
 }
-
 
 class MifCompany {
 
     /**
      * @param data
-     * .currentUserData - dane aktualnie zalogowanego users
-     *
      */
     constructor(data) {
         console.group(`constructor: MifCompany`);
@@ -819,6 +800,270 @@ class MifCompany {
 
 }
 
+class DevicesList {
+
+    /**
+     * @param data
+     */
+    constructor(data) {
+        console.clear();
+        console.group(`constructor: DevicesList`);
+        const self = this;
+        this.data = data;
+        //console.log(this.data);
+        this.$containerMain = $('div[data-name=container-main]');
+        this.$sectionFilters = $('section[data-name=filters]', this.$containerMain);
+        this.$btnSearch = $('button[name=btn-search]', this.$containerMain);
+        // ----
+        this.$tableDevicesList = $('table[data-name=table-devices-list]', this.$containerMain);
+        let tableDevicesListInit = {
+            ...dataTableInit,
+            rowId: 'dev_id',
+            columns: [
+                {data: 'dev_id'},                  // --- 0
+                {data: 'dev_serial_no'},           // --- 1
+                {data: 'dev_no'},                  // --- 2
+                {data: 'dev_name'},                // --- 3
+                {data: 'current_agr_no'},          // --- 4
+                {data: 'dev_cust_name'},           // --- 5
+                {data: null},                      // --- -1
+            ],
+            createdRow: function (row, data, dataIndex) {
+                if (data.current_agr_status_txt === 'aktywna' && (+data.ai_installation_address_status !== 1 || +data.ai_toner_address_status !== 1)) {
+                    $(row).find('td').addClass('text-danger');
+                }
+            },
+            columnDefs: [
+                {
+                    ...dataTableColumnDef,
+                    targets: [0],
+                    width: '5%',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [1, 2],
+                    width: '12%',
+                    className: 'ellipsis',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [3],
+                    className: 'ellipsis',
+                    width: '20%',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [4],
+                    width: '11%',
+                },
+                {
+                    ...dataTableColumnDef,
+                    targets: [5],
+                    className: 'ellipsis',
+                },
+                {
+                    targets: [-1],
+                    visible: false,
+                },
+            ],
+        }
+        this.tableDevicesList = this.$tableDevicesList.DataTable(tableDevicesListInit);
+        this.$tableDevicesList.on('click', 'tbody > tr', this.editDevice);
+        // ---- czyszczenie inputa filtra przy zmianie typu filtra
+        this.$containerMain.find('select[name=filter_type]').on('change', (e) => {
+            $(e.currentTarget).siblings('input').val('');
+        })
+        // -----------------
+        this.$btnSearch.on('click', this.getDevices);
+        // -----------------
+        console.groupEnd();
+    }
+
+    editDevice = async (e) => {
+        console.log('edit device');
+        e.preventDefault();
+        const id = +e.currentTarget.id;
+        if (!isNaN(id) && id > 0) {
+            const modal = new MyModal('device', {'dev_id': id});
+            await modal.initialize();
+        }
+    }
+
+    getDevices = () => {
+        console.log('getDevices');
+        const params = getParametersFromForm(this.$sectionFilters);
+        switch (params.filter_type) {
+            case 'dev_name' :
+                params.dev_name = params.filter_value;
+                break;
+            case 'dev_serial_no' :
+                params.dev_serial_no = params.filter_value;
+                break;
+            case 'cust_name' :
+                params.cust_name = params.filter_value;
+                break;
+            case 'agr_no' :
+                params.agr_no = params.filter_value;
+                break;
+        }
+        console.log(`filter type: ${params.filter_type} filter: ${params.filter_value}  `)
+        this.fetchDevices(params);
+    }
+
+    fetchDevices = async (params) => {
+        let uri = '/axdev/getdevsbyfilters';
+        $overlaySpinner.fadeIn(300);
+        const [data,] = await Promise.all([fx(uri, params),]);
+        console.log(data);
+        this.refreshTableDevices(data.devices);
+        $overlaySpinner.fadeOut(300);
+    }
+
+    refreshTableDevices = (devices) => {
+        this.tableDevicesList.clear();
+        this.tableDevicesList.rows.add(devices).draw();
+    }
+
+}
+
+
+class WorkCardsList {
+
+    /**
+     * @param data
+     */
+    constructor(data) {
+        //console.clear();
+        console.group(`constructor: WorkCardsList`);
+        const self = this;
+        this.data = data;
+        //console.log(this.data);
+        this.$containerMain = $('div[data-name=container-main]');
+        this.$sectionFilters = $('section[data-name=filters]', this.$containerMain);
+        this.$btnSearch = $('button[name=btn-search]', this.$containerMain);
+        this.$btnColumnsConfigSave = this.$containerMain.find('button[name=btn-columns-config-save]');
+        this.$hideColumnInputs = this.$containerMain.find('div[data-name=hide-column-inputs]');
+        this.$tableWcList = this.$containerMain.find('table[data-name=table-wc-list]');
+        // ---------------------------------------------------------------------------
+        // ---- dynamiczne generowanie kolumn
+        const userColumns = {};
+        for (const el of this.data.table.userColumns) {
+            userColumns[el.pivot.dynamic_table_column_id] = !!(parseInt(el.pivot.hidden));
+        }
+        const columnDefs = [];
+        for (const el of this.data.table.columns) {
+            // ---- columns
+            let html = '<th class="ellipsis"></th>';
+            this.$tableWcList.find('thead > tr').append(html);
+            // ---- hiding columns
+            let checked = userColumns[el.id] ? 'checked' : '';
+            html = '<div class="form-check">';
+            html += '<input type="checkbox" class="form-check-input" id="' + el.data + '" name="' + el.id + '" ' + checked + '>';
+            html += '<label class="form-check-label" for="' + el.data + '">' + el.title + '</label>';
+            html += '</div>';
+            this.$hideColumnInputs.append(html);
+            // ---- def columns
+            let col = {
+                ...dataTableColumnDef,
+                targets: parseInt(el.targets),
+                data: el.data,
+                name: el.data,
+                title: el.title,
+                className: el.class_name,
+                width: (el.width === null) ? '' : el.width,
+            }
+            columnDefs.push(col);
+        }
+        let tableInit = {
+            ...dataTableInit,
+            rowId: 'wc_id',
+            scrollX: true,
+            autoWidth: false,
+            fixedHeader: true,
+            createdRow: function (row, data, dataIndex) {
+            },
+            columnDefs: columnDefs,
+        }
+        // --------
+        //console.log(tableInit);
+        this.tableWcList = this.$tableWcList.DataTable({...tableInit});
+        this.$tableWcList.on('click', 'tbody > tr', this.showWC);
+        // ---------------------------------------------------------------------------
+        // -------------------------- hiding columns
+        // ---- hide on start
+        for (const el of this.data.table.columns) {
+            let hidden = userColumns[+el.id];
+            let column = self.tableWcList.column(+el.targets);
+            column.visible(!hidden);
+        }
+        // ---- hide on demand
+        this.$formColumnsTitle = this.$containerMain.find('form[name=form-columns-title]');
+        this.$formColumnsTitle.on('change', 'input', function () {
+            let hide = $(this).prop('checked');
+            let column = self.tableWcList.column($(this).prop('id') + ':name');
+            column.visible(!hide);
+        })
+        // ---- columns config save
+        this.$btnColumnsConfigSave.on('click', this.columnsConfigSave)
+        // ---------------------------------------------------------------------------
+        this.$btnSearch.on('click', this.getWCs);
+        // -----------------
+        console.groupEnd();
+    }
+
+    columnsConfigSave = async (e) => {
+        const $btn = $(e.target);
+        $btn.addClass('btn-success');
+        setTimeout(() => {
+            $btn.removeClass('btn-success');
+        }, 2000);
+        const params = {
+            table: this.data.table,
+            columns: getParametersFromForm(this.$formColumnsTitle),
+            cud: CUD,
+        }
+        let uri = '/axdtc/usercolumnsync';
+        const [data,] = await Promise.all([fx(uri, params),]);
+    }
+
+    showWC = async (e) => {
+        console.log('showWC');
+        e.preventDefault();
+        const id = +e.currentTarget.id;
+        if (!isNaN(id) && id > 0) {
+            const modal = new MyModal('work-card', {'wc_id': id});
+            await modal.initialize();
+        }
+    }
+
+    getWCs = () => {
+        console.log('getWCs');
+        const params = getParametersFromForm(this.$sectionFilters);
+        if (+params.wc_status_ids === 0 && +params.wcOpened === 1 && +params.wcClosed === 0) {
+            params.wc_status_ids = '416;417;419;420;426;';
+        }
+        if (+params.wc_status_ids === 0 && +params.wcOpened === 0 && +params.wcClosed === 1) {
+            params.wc_status_ids = '418;421;422;423;462;';
+        }
+        console.log(params)
+        this.fetchWCs(params);
+    }
+
+    fetchWCs = async (params) => {
+        let uri = '/axwc/getwcs';
+        $overlaySpinner.fadeIn(300);
+        const [data,] = await Promise.all([fx(uri, params),]);
+        this.refreshTableWC(data.wcs);
+        $overlaySpinner.fadeOut(300);
+    }
+
+    refreshTableWC = (wcs) => {
+        console.log(wcs);
+        this.tableWcList.clear();
+        this.tableWcList.rows.add(wcs).draw();
+    }
+
+}
 
 // //// ---------------------------------------------------------------------------------------------
 // //// ----------------------------------------------------------------------------------------------
@@ -826,5 +1071,7 @@ export {
     CustomersList,
     CustomersCostsAndProfits,
     MifCompany,
+    DevicesList,
+    WorkCardsList,
 }
 

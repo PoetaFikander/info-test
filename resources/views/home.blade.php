@@ -8,33 +8,47 @@
                     <div class="card-header">{{ __('Dashboard') }}</div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
+                        <p>Szybki dostęp</p>
 
-                        {{ __('You are logged in!') }}
-
-                        <p>This is your application dashboard.</p>
-                        @canany(['create-permission', 'edit-permission', 'delete-permission'])
-                            <a class="btn btn-info" href="{{ route('permissions.index') }}">
-                                <i class="bi bi-person-fill-gear"></i> Manage Permissions</a>
+                        @canany(['show-device', 'edit-device', 'export-device'])
+                            <a class="btn btn-info" href="{{ route('reports.dev') }}">
+                                <i class="bi bi-device-hdd-fill"></i> Lista urządzeń</a>
                         @endcanany
 
-                        @canany(['create-role', 'edit-role', 'delete-role'])
-                            <a class="btn btn-primary" href="{{ route('roles.index') }}">
-                                <i class="bi bi-person-fill-gear"></i> Manage Roles</a>
+                        @canany(['show-device', 'edit-device', 'export-device'])
+                            <a class="btn btn-info" href="{{ route('reports.wc') }}">
+                                <i class="bi bi-card-checklist"></i> Lista zleceń</a>
                         @endcanany
-                        @canany(['create-user', 'edit-user', 'delete-user'])
-                            <a class="btn btn-success" href="{{ route('users.index') }}">
-                                <i class="bi bi-people"></i> Manage Users</a>
-                        @endcanany
-                        @canany(['create-product', 'edit-product', 'delete-product'])
-                            <a class="btn btn-warning" href="{{ route('products.index') }}">
-                                <i class="bi bi-bag"></i> Manage Products</a>
-                        @endcanany
-                        <p>&nbsp;</p>
+
+
+                        {{--                        @if (session('status'))--}}
+                        {{--                            <div class="alert alert-success" role="alert">--}}
+                        {{--                                {{ session('status') }}--}}
+                        {{--                            </div>--}}
+                        {{--                        @endif--}}
+
+                        {{--                        {{ __('You are logged in!') }}--}}
+
+                        {{--                        <p>This is your application dashboard.</p>--}}
+                        {{--                        @canany(['create-permission', 'edit-permission', 'delete-permission'])--}}
+                        {{--                            <a class="btn btn-info" href="{{ route('permissions.index') }}">--}}
+                        {{--                                <i class="bi bi-person-fill-gear"></i> Manage Permissions</a>--}}
+                        {{--                        @endcanany--}}
+
+                        {{--                        @canany(['create-role', 'edit-role', 'delete-role'])--}}
+                        {{--                            <a class="btn btn-primary" href="{{ route('roles.index') }}">--}}
+                        {{--                                <i class="bi bi-person-fill-gear"></i> Manage Roles</a>--}}
+                        {{--                        @endcanany--}}
+                        {{--                        @canany(['create-user', 'edit-user', 'delete-user'])--}}
+                        {{--                            <a class="btn btn-success" href="{{ route('users.index') }}">--}}
+                        {{--                                <i class="bi bi-people"></i> Manage Users</a>--}}
+                        {{--                        @endcanany--}}
+                        {{--                        @canany(['create-product', 'edit-product', 'delete-product'])--}}
+                        {{--                            <a class="btn btn-warning" href="{{ route('products.index') }}">--}}
+                        {{--                                <i class="bi bi-bag"></i> Manage Products</a>--}}
+                        {{--                        @endcanany--}}
+                        {{--                        <p>&nbsp;</p>--}}
+
                     </div>
                 </div>
             </div>

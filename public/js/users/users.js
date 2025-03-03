@@ -24,14 +24,11 @@ if (section === 'users') {
     (async () => {
         $overlaySpinner.fadeIn(300);
         const [
-            currentUserData,
             users,
         ] = await Promise.all([
-            fx('/axhelp/getCurrentUserData'),
             fx('/axhelp/getUsersList'),
         ]);
         const temp = new UsersList({
-            currentUserData: currentUserData,
             users: users,
         });
         $overlaySpinner.fadeOut(300);

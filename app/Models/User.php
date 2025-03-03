@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\IT\DynamicTableColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -53,9 +54,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    /**
-     * @return BelongsToMany
-     */
+
+    public function dynamicTableColumns(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            DynamicTableColumn::class,
+            'dynamic_table_column_user',
+        )->withPivot(['hidden','dynamic_table_id',]);
+    }
+
     public function departments(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -64,9 +71,6 @@ class User extends Authenticatable
         );
     }
 
-    /**
-     * @return BelongsToMany
-     */
     public function stores(): BelongsToMany
     {
         return $this->belongsToMany(

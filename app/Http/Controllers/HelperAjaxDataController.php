@@ -6,13 +6,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\Employee;
+use App\Models\IT\DynamicTable;
 use App\Models\Reports\Agreement;
 use App\Models\Section;
 use App\Models\User;
 use App\Models\Workplace;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HelperAjaxDataController extends Controller
 {
@@ -43,10 +46,19 @@ class HelperAjaxDataController extends Controller
     public function getUsersList(): JsonResponse
     {
         $users = User::all();
+        //$user_sessions = \DB::table('sessions')->where('user_id', Auth::user()->id)->get();
         foreach ($users as $user) {
             $user->{'name_surname'} = $user->name . ' ' . $user->surname;
+            $lastSession = DB::table('sessions')->where('user_id', $user->id)->get();
+            $lastActivity = '';
+            if (isset($lastSession[0])) {
+                $lastActivity = $lastSession[0]->last_activity;
+                $lastActivity = Carbon::createFromTimestamp($lastActivity)->toDateTimeString();
+            }
+            $user->{'last_activity'} = $lastActivity;
             $user->getRoleNames();
         }
+
         return response()->json($users, 200);
     }
 
@@ -64,6 +76,23 @@ class HelperAjaxDataController extends Controller
             $employee->section;
         }
         return response()->json($employees, 200);
+    }
+
+    public function getDynamicTablesList(): JsonResponse
+    {
+        $tables = DynamicTable::all();
+        return response()->json($tables, 200);
+    }
+
+    public function getDynamicTable(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        $dynamicTable = DynamicTable::find($input['id']);
+        $columns = $dynamicTable->columns;
+        $user = Auth::user();
+        $dynamicTable->userColumns = $user->dynamicTableColumns()->wherePivot('dynamic_table_id', $dynamicTable->id)->get();
+        return response()->json($dynamicTable, 200);
+        //return response()->json(['header' => $dynamicTable, 'columns' => $columns], 200);
     }
 
 

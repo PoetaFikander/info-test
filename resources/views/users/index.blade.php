@@ -7,12 +7,14 @@
                 @can('create-user')
                     <a href="{{ route('users.create') }}" class="btn btn-success btn-sm my-2"><i class="bi bi-plus-circle"></i> Add New User</a>
                 @endcan
-                <table class="table table-striped table-bordered" data-name="table-users-list">
+                <table class="table table-striped table-bordered table-sm" data-name="table-users-list">
                     <thead>
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Nazwisko</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Ostatnie logowanie</th>
+                        <th scope="col">Ostatnia aktywność</th>
                         <th scope="col">Role</th>
                         <th scope="col">Działania</th>
                     </tr>

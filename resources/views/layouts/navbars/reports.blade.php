@@ -41,5 +41,20 @@
             </ul>
         </li>
 
+        <li class="dropend">
+            <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">Urządzenia</a>
+            <ul class="dropdown-menu shadow">
+                <li><a class="dropdown-item" href="{{ route('reports.dev') }}">Lista</a></li>
+            </ul>
+        </li>
+
+        <li class="dropend">
+            <a href="#" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">Zlecenia serwisowe</a>
+            <ul class="dropdown-menu shadow">
+                <li><a class="dropdown-item" href="{{ route('reports.wc') }}">Lista</a></li>
+            </ul>
+        </li>
+
+
     </ul>
 </li>

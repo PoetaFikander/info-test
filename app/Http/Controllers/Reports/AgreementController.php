@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\Controller;
+use App\Models\Reports\Agreement;
+use App\Models\Reports\Mif;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -17,16 +20,33 @@ class AgreementController extends Controller
 
     public function costsAndProfits_full(): View
     {
-        return view(
-            'reports.agreements.costs-and-profits',
-            [
-//                'years' => getYears(),
-//                'months' => getMonths(),
-//                'departments' => Department::all()->sortBy('symbol'),
-//                'patrons' => Employee::where('section_id', 2)->get(),
-            ]
-        );
+        return view('reports.agreements.costs-and-profits', []);
+    }
 
+    /**
+     * ------------------------------------------------------------------------------
+     * ---------------- methods called by AJAX --------------------------------------
+     */
+
+    public function updateAgreementItemRate(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        $result = Agreement::updateAgreementItemRate($input);
+        return response()->json($result, 200);
+    }
+
+    public function getAgreementItems(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        $result = Agreement::getAgreementItems($input);
+        return response()->json($result, 200);
+    }
+
+    public function getAgreementItemRates(Request $request): JsonResponse
+    {
+        $input = $request->all();
+        $result = Agreement::getAgreementItemRates($input);
+        return response()->json($result, 200);
     }
 
 

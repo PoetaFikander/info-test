@@ -58,6 +58,7 @@ class ProductController extends Controller
      */
     public function show(Product $product): View
     {
+        dump($product);
         return view('products.show', [
             'product' => $product
         ]);
